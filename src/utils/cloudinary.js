@@ -13,7 +13,7 @@ cloudinary.config({
 
 const uploadImage = async (filePath) => {
   return await cloudinary.uploader.upload(filePath, {
-    folder: "fachetti",
+    folder: "cloudinary_demo",
     transformation: {
       quality: 50,
     },
