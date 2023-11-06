@@ -62,3 +62,17 @@ describe("POST /publications route -> create new publication validations", () =>
     });
   }
 });
+
+describe("POST /publications route -> create new publication without image", () => {
+  it("it should return 201 status code -> new publication success", async () => {
+    const publication = {
+      title: "Publication 1",
+      description: "Description Publication 1",
+    };
+
+    const response = await request(app).post("/publications").send(publication);
+    expect(response.status).toBe(201);
+    expect(response.body.data.title).toBe("Publication 1");
+    expect(response.body.data.description).toBe("Description Publication 1");
+  });
+});
