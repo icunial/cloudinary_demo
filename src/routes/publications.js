@@ -7,9 +7,11 @@ const validations = require("../utils/validations/publications");
 
 const { createPublication } = require("../controllers/publications");
 
-const { uploadImage } = require("../utils/cloudinary");
+const { uploadImage, deleteImage } = require("../utils/cloudinary");
 const fs = require("fs-extra");
 const fileUpload = require("express-fileupload");
+
+const { validateId } = require("../utils/validations/index");
 
 // Create new publication
 router.post(
@@ -65,5 +67,58 @@ router.post(
     }
   }
 );
+
+// Delete image of a publication
+router.put("/image/remove/:id", async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!validateId(id)) {
+    return res.status(400).json({
+      statusCode: 400,
+      msg: `ID invalid format!`,
+    });
+  }
+
+  try {
+    const publicationFound = await Publication.findByPk(id);
+
+    if (!publicationFound) {
+      return res.status(404).json({
+        statusCode: 404,
+        msg: `Publication with ID: ${id} not found!`,
+      });
+    }
+
+    if (!publicationFound.image_id) {
+      return res.status(400).json({
+        statusCode: 400,
+        msg: "This publication does not have an image to delete!",
+      });
+    }
+
+    const result = await deleteImage(publicationFound.image_id);
+
+    if (result) {
+      const publicationUpdated = await Publication.update(
+        {
+          image: null,
+          image_id: null,
+        },
+        {
+          where: {
+            id,
+          },
+        }
+      );
+
+      res.status(200).json({
+        statusCode: 200,
+        msg: "Image deleted successfully!",
+      });
+    }
+  } catch (error) {
+    return next(error);
+  }
+});
 
 module.exports = router;
