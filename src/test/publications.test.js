@@ -65,6 +65,8 @@ describe("POST /publications route -> create new publication validations", () =>
   }
 });
 
+let publication1_id, publication2_id;
+
 describe("POST /publications route -> create new publication without image", () => {
   it("it should return 201 status code -> new publication success", async () => {
     const publication = {
@@ -76,10 +78,9 @@ describe("POST /publications route -> create new publication without image", () 
     expect(response.status).toBe(201);
     expect(response.body.data.title).toBe("Publication 1");
     expect(response.body.data.description).toBe("Description Publication 1");
+    publication1_id = response.body.data.id;
   });
 });
-
-const filePath = `${__dirname}/src/images/publication1.jpg`;
 
 describe("POST /publications route -> create new publication with image", () => {
   it("it should return 201 status code -> new publication success with image", async () => {
@@ -96,5 +97,14 @@ describe("POST /publications route -> create new publication with image", () => 
     expect(response.status).toBe(201);
     expect(response.body.data.title).toBe("Publication 2");
     expect(response.body.data.description).toBe("Description Publication 2");
+    publication2_id = response.body.data.id;
+  });
+});
+
+describe("PUT /publications/image/remove/:id route -> delete publication image", () => {
+  it("it should return 400 status code -> id invalid format", async () => {
+    const response = await request(app).put("/publications/image/remove/1");
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("ID invalid format!");
   });
 });
