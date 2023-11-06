@@ -125,4 +125,11 @@ describe("PUT /publications/image/remove/:id route -> delete publication image",
       "This publication does not have an image to delete!"
     );
   });
+  it("it should return 200 status code -> image deleted", async () => {
+    const response = await request(app).put(
+      `/publications/image/remove/${publication2_id}`
+    );
+    expect(response.status).toBe(200);
+    expect(response.body.msg).toBe("Image deleted successfully!");
+  });
 });
