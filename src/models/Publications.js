@@ -31,7 +31,7 @@ const Publication = db.define(
     },
     image_id: {
       type: DataTypes.STRING,
-      defaultValue: false,
+      defaultValue: null,
     },
   },
   {
