@@ -116,4 +116,13 @@ describe("PUT /publications/image/remove/:id route -> delete publication image",
       "Publication with ID: 02519561-4e93-4ae3-b380-18232ca8f4c8 not found!"
     );
   });
+  it("it should return 400 status code -> no image in publication", async () => {
+    const response = await request(app).put(
+      `/publications/image/remove/${publication1_id}`
+    );
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe(
+      "This publication does not have an image to delete!"
+    );
+  });
 });
