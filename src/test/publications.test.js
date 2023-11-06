@@ -82,7 +82,7 @@ describe("POST /publications route -> create new publication without image", () 
 const filePath = `${__dirname}/src/images/publication1.jpg`;
 
 describe("POST /publications route -> create new publication with image", () => {
-  it("it should return 201 status code -> new publication success", async () => {
+  it("it should return 201 status code -> new publication success with image", async () => {
     const publication = {
       title: "Publication 2",
       description: "Description Publication 2",
