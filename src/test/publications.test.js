@@ -2,6 +2,8 @@ const request = require("supertest");
 const app = require("../../index");
 const db = require("../db");
 
+const fs = require("fs-extra");
+
 beforeAll(async () => {
   await db.sync({ force: true });
   // await Product.truncate()
@@ -74,5 +76,25 @@ describe("POST /publications route -> create new publication without image", () 
     expect(response.status).toBe(201);
     expect(response.body.data.title).toBe("Publication 1");
     expect(response.body.data.description).toBe("Description Publication 1");
+  });
+});
+
+const filePath = `${__dirname}/src/images/publication1.jpg`;
+
+describe("POST /publications route -> create new publication with image", () => {
+  it("it should return 201 status code -> new publication success", async () => {
+    const publication = {
+      title: "Publication 2",
+      description: "Description Publication 2",
+    };
+
+    const response = await request(app)
+      .post("/publications")
+      .field("title", publication.title)
+      .field("description", publication.description)
+      .attach("image", `${__dirname}/publication1.jpg`);
+    expect(response.status).toBe(201);
+    expect(response.body.data.title).toBe("Publication 2");
+    expect(response.body.data.description).toBe("Description Publication 2");
   });
 });
