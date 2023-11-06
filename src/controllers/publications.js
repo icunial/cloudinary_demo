@@ -8,6 +8,8 @@ const createPublication = async (title, description, image, image_id) => {
       image,
       image_id,
     });
+
+    return publicationCreated;
   } catch (error) {
     throw new Error("Error trying to create a new publication");
   }
